@@ -2,6 +2,8 @@
 a hello world project for terraform. Will use terraform to provision an NGINX server using docker.
 
 ## My environment
+I have one Window 11 laptop. In this project, I'll create 2 linux virtual machines on my laptop to practice terraform.
+
 * mylinux
     * Ubuntu 22.04 VM created by Multipass on Windows 11
     * runs terraform
