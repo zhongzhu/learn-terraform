@@ -10,3 +10,4 @@ a hello world project for terraform
 $ sudo snap install terraform --classic
 ```
 
+Try "terraform --help" to see if the installation is successful.
