@@ -1,13 +1,32 @@
 # learn-terraform
-a hello world project for terraform
+a hello world project for terraform. Will use terraform to provision an NGINX server using docker.
 
-## My Environment
-* Running a Ubuntu 22.04 VM created by Multipass
+## My environment
+* mylinux
+    * Ubuntu 22.04 VM created by Multipass on Windows 11
+    * runs terraform
+* mylinux2
+    * target machine, to be provisioned by terraform
+    * Ubuntu 22.04 VM created by Multipass on Windows 11
 
-## Install Terraform
+## Install mylinux
+
+### Install terraform
 ```
 # do you know why there is a --classic at the end?
 $ sudo snap install terraform --classic
 ```
-
-Try "terraform --help" to see if the installation is successful.
+### Verify the installation
+```
+$ terraform --help
+$ terraform -help plan 
+```
+## Install mylinux2
+### Install docker engine
+```
+$ sudo snap install docker
+```
+### Verify the installation
+```
+$ sudo docker ps
+```
