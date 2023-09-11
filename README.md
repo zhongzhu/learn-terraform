@@ -1,5 +1,5 @@
 # learn terraform docker provider
-a hello world project for terraform. Will use terraform to provision an NGINX server using docker.
+This is a detailed note taken when I follow https://developer.hashicorp.com/terraform/tutorials/docker-get-started to learn terraform docker provider.
 
 ## My environment
 In this project, I'll create 2 Ubuntu virtual machines on my Windows 11 Pro laptop to practice terraform.
@@ -16,7 +16,7 @@ In this project, I'll create 2 Ubuntu virtual machines on my Windows 11 Pro lapt
 ## Create virtual machines
 
 ### Install multipass
-follow the instruction at https://multipass.run/ to install multipass on Windows 11 Pro.
+Follow the instruction on https://multipass.run/ to install multipass on Windows 11 Pro.
 
 ### Create Ubuntu virtual machines
 Issue below commands in Windows Terminal
@@ -182,3 +182,11 @@ Thank you for using nginx.
 ```
 
 then it means the provision is done successfully. Congrats!
+
+## Destroy the NGINX server
+once you've done with the NGINX server, you can use terraform to destroy it.
+
+on mylinux
+```
+$ terraform destroy
+```
