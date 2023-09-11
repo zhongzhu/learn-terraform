@@ -7,7 +7,10 @@ terraform {
   }
 }
 
-provider "docker" {}
+provider "docker" {
+  # host     = "ssh://ubuntu@172.30.74.233:22"
+  # ssh_opts = ["-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null"]
+}
 
 resource "docker_image" "nginx" {
   name         = "nginx"

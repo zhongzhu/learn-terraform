@@ -32,3 +32,21 @@ $ sudo snap install docker
 ```
 $ sudo docker ps
 ```
+
+### Allow non-root user to run docker commands
+when you see below issue
+```
+zhongzhu@mylinux:~/workspace$ docker ps
+Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/json": dial unix /var/run/docker.sock: connect: permission denied
+```
+It's a sign that you should `sudo docker ps` but you forgot. With terraform docker provider, you'll probably run terraform with a non-root user like "zhongzhu". so it's important to do below to allow non-root user to run docker commands.
+
+Check out link https://docs.docker.com/engine/install/linux-postinstall/ for more detailed instruction.
+
+```
+$ sudo addgroup docker
+$ sudo adduser $USER docker
+$ newgrp docker
+$ sudo snap disable docker
+$ sudo snap enable docker
+```
