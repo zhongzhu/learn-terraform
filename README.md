@@ -1,21 +1,49 @@
-# learn-terraform
+# learn terraform docker provider
 a hello world project for terraform. Will use terraform to provision an NGINX server using docker.
 
 ## My environment
-I have one Window 11 laptop. In this project, I'll create 2 linux virtual machines on my laptop to practice terraform.
+In this project, I'll create 2 Ubuntu virtual machines on my Windows 11 Pro laptop to practice terraform.
 
 * mylinux
-    * Ubuntu 22.04 VM created by Multipass on Windows 11
     * runs terraform
+    * Ubuntu 22.04
+    * docker 20.10.24
 * mylinux2
     * target machine, to be provisioned by terraform
-    * Ubuntu 22.04 VM created by Multipass on Windows 11
+    * Ubuntu 22.04
+    * docker 20.10.24
+
+## Create virtual machines
+
+### Install multipass
+follow the instruction at https://multipass.run/ to install multipass on Windows 11 Pro.
+
+### Create Ubuntu virtual machines
+Issue below commands in Windows Terminal
+```
+> multipass launch -n mylinux
+> multipass launch -n mylinux2
+```
+
+### Add mylinux's ssh key to mylinux2
+On mylinux
+```
+$ sudo ssh-keygen -t ed25519
+```
+
+On mylinux2
+```
+$ cd
+$ mkdir .ssh
+$ touch ~/.ssh/authorized_keys
+```
+Append the content of mylinux's `~/.ssh/id_ed25519.pub` to mylinux2's `~/.ssh/authorized_keys`.
 
 ## Install mylinux
 
 ### Install terraform
+do you know why there is a --classic at the end?
 ```
-# do you know why there is a --classic at the end?
 $ sudo snap install terraform --classic
 ```
 ### Verify the installation
@@ -23,7 +51,8 @@ $ sudo snap install terraform --classic
 $ terraform --help
 $ terraform -help plan 
 ```
-## Install mylinux2
+## Install docker engine on both mylinux and mylinux2
+
 ### Install docker engine
 ```
 $ sudo snap install docker
@@ -50,3 +79,106 @@ $ newgrp docker
 $ sudo snap disable docker
 $ sudo snap enable docker
 ```
+
+## Let's run the code
+On mylinux
+```
+$ git clone https://github.com/zhongzhu/learn-terraform.git
+$ cd learn-terraform
+$ terraform init
+$ terraform plan
+$ terraform apply
+```
+
+Below is the execution output.
+
+```
+zhongzhu@mylinux:~/workspace/learn-terraform$ terraform apply
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # docker_container.nginx will be created
+  + resource "docker_container" "nginx" {
+      + attach                                      = false
+      + bridge                                      = (known after apply)
+      + command                                     = (known after apply)
+      + container_logs                              = (known after apply)
+      + container_read_refresh_timeout_milliseconds = 15000
+      + entrypoint                                  = (known after apply)
+      + env                                         = (known after apply)
+      + exit_code                                   = (known after apply)
+      + hostname                                    = (known after apply)
+      + id                                          = (known after apply)
+      + image                                       = (known after apply)
+      + init                                        = (known after apply)
+      + ipc_mode                                    = (known after apply)
+      + log_driver                                  = (known after apply)
+      + logs                                        = false
+      + must_run                                    = true
+      + name                                        = "tutorial"
+      + network_data                                = (known after apply)
+      + read_only                                   = false
+      + remove_volumes                              = true
+      + restart                                     = "no"
+      + rm                                          = false
+      + runtime                                     = (known after apply)
+      + security_opts                               = (known after apply)
+      + shm_size                                    = (known after apply)
+      + start                                       = true
+      + stdin_open                                  = false
+      + stop_signal                                 = (known after apply)
+      + stop_timeout                                = (known after apply)
+      + tty                                         = false
+      + wait                                        = false
+      + wait_timeout                                = 60
+
+      + ports {
+          + external = 8000
+          + internal = 80
+          + ip       = "0.0.0.0"
+          + protocol = "tcp"
+        }
+    }
+
+  # docker_image.nginx will be created
+  + resource "docker_image" "nginx" {
+      + id           = (known after apply)
+      + image_id     = (known after apply)
+      + keep_locally = false
+      + name         = "nginx"
+      + repo_digest  = (known after apply)
+    }
+
+Plan: 2 to add, 0 to change, 0 to destroy.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+docker_image.nginx: Creating...
+docker_image.nginx: Still creating... [10s elapsed]
+docker_image.nginx: Still creating... [20s elapsed]
+docker_image.nginx: Creation complete after 26s [id=sha256:f5a6b296b8a29b4e3d89ffa99e4a86309874ae400e82b3d3993f84e1e3bb0eb9nginx]
+docker_container.nginx: Creating...
+docker_container.nginx: Creation complete after 2s [id=7d9e4e5eb1939119bdb19f39381f51b004d7ad3ce42fa77e87432c7cd3e9a00f]
+
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+```
+
+After terraform apply done, we can test our provision. As the NGINX docker container is started on mylinux2, you can check mylinux2's IP address using `ip a`. Then on Windows host, fire up your browser to access `http://<mylinux2's ip>:8000`. If you see
+```
+Welcome to nginx!
+If you see this page, the nginx web server is successfully installed and working. Further configuration is required.
+
+For online documentation and support please refer to nginx.org.
+Commercial support is available at nginx.com.
+
+Thank you for using nginx.
+```
+
+then it means the provision is done successfully. Congrats!
