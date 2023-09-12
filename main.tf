@@ -8,8 +8,7 @@ terraform {
 }
 
 provider "docker" {
-  # 172.30.74.233 is the mylinux2 ip
-  host     = "ssh://ubuntu@172.30.74.233:22"
+  host     = "ssh://ubuntu@mylinux2.mshome.net:22"
   ssh_opts = ["-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null"]
 }
 

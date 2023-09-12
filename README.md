@@ -7,7 +7,6 @@ In this project, I'll create 2 Ubuntu virtual machines on my Windows 11 Pro lapt
 * mylinux
     * runs terraform
     * Ubuntu 22.04
-    * docker 20.10.24
 * mylinux2
     * target machine, to be provisioned by terraform
     * Ubuntu 22.04
@@ -39,7 +38,7 @@ $ touch ~/.ssh/authorized_keys
 ```
 Append the content of mylinux's `~/.ssh/id_ed25519.pub` to mylinux2's `~/.ssh/authorized_keys`.
 
-## Install mylinux
+## Setup mylinux
 
 ### Install terraform
 do you know why there is a --classic at the end?
@@ -51,7 +50,7 @@ $ sudo snap install terraform --classic
 $ terraform --help
 $ terraform -help plan 
 ```
-## Install docker engine on both mylinux and mylinux2
+## Setup mylinux2
 
 ### Install docker engine
 ```
@@ -65,7 +64,7 @@ $ sudo docker ps
 ### Allow non-root user to run docker commands
 when you see below issue
 ```
-zhongzhu@mylinux:~/workspace$ docker ps
+zhongzhu@mylinux2:~/workspace$ docker ps
 Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/json": dial unix /var/run/docker.sock: connect: permission denied
 ```
 It's a sign that you should `sudo docker ps` but you forgot. With terraform docker provider, you'll probably run terraform with a non-root user like "zhongzhu". so it's important to do below to allow non-root user to run docker commands.
@@ -170,7 +169,7 @@ docker_container.nginx: Creation complete after 2s [id=7d9e4e5eb1939119bdb19f393
 Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
 ```
 
-After terraform apply done, we can test our provision. As the NGINX docker container is started on mylinux2, you can check mylinux2's IP address using `ip a`. Then on Windows host, fire up your browser to access `http://<mylinux2's ip>:8000`. If you see
+After terraform apply done, we can test our provision. As the NGINX docker container is started on mylinux2, you can check mylinux2's IP address using `ip a`. Then on Windows host, fire up your browser to access `http://mylinux2.mshome.net:8000`. If you see
 ```
 Welcome to nginx!
 If you see this page, the nginx web server is successfully installed and working. Further configuration is required.
