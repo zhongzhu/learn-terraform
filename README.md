@@ -28,7 +28,7 @@ Issue below commands in Windows Terminal
 ### Add mylinux's ssh key to mylinux2
 On mylinux
 ```
-$ sudo ssh-keygen -t ed25519
+$ ssh-keygen -t ed25519
 ```
 
 On mylinux2
